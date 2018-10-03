@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Today in History</title>
+  </head>
+  <body>
+    <script src="apiFunctions.js"></script>
+    <script>
+      (async ()=>{
+        const city = await getUserLocation();
+        const newspapers = await getNewspapers(city);
+
+        document.querySelector('body').innerHTML = '<pre>' + JSON.stringify(newspapers, null, 2) + '</pre>';
+
+        console.log(newspapers);
+      })().catch(console.error);
+    </script>
+  </body>
+</html>
