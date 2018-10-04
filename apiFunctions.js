@@ -48,7 +48,7 @@ const populateIssues = papers=>Promise.all(papers.map(paper=>getJSON(paper.url.r
 // Filter for papers with issues on current day
 const filterToday = async papers=>{
   // Filter issues that happened on this day
-  let date = '-' + ((new Date()).getMonth() + 1 + '').padStart(2, '0') + '-' + ((new Date()).getDate() + 2 + '').padStart(2, '0');
+  let date = '-' + ((new Date()).getMonth() + 1 + '').padStart(2, '0') + '-' + ((new Date()).getDate() + '').padStart(2, '0');
   console.log('filtering by ' + date);
   papers.map(paper=>{
     paper.issues = paper.issues.filter(issue=>issue.date_issued.includes(date))
