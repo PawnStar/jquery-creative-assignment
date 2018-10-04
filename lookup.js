@@ -14,17 +14,22 @@ const showError = message=>{
 
 // On page load then get city
 $(document).ready(()=>{
+  // Disable input temporarily
   $('#search input[name="city"]').val('Looking up city . . .')
   $('#search input[name="city"]').attr('disabled', true);
 
+  // Make async request
   getUserLocation()
+    // On promise resolution, set text box value
     .then(location=>{
       $('#search input[name="city"]').val(location.join(' '))
     })
+    // On promise error, clear text box
     .catch(err=>{
       $('#search input[name="city"]').val('')
       console.error(err);
     })
+    // In either case enable it again
     .finally(()=>{
       $('#search input[name="city"]').attr('disabled', false);
     })
@@ -34,18 +39,20 @@ $(document).ready(()=>{
 $('#search form').submit(ev=>{
   if(ev) ev.preventDefault();
 
-  // Get the words
+  // Get the text input
   const search = $('#search input[name="city"]').val().split(' ');
   progress('Looking up newspapers . . .');
 
-  // Show searching progress
+  // Hide newspaper
   $('#newspaper')
     .height(0)
     .addClass('searching')
-    .addClass('hidden')
+    .addClass('hidden');
+
+  // Show searching progress
   $('#indicator').removeClass('error');
 
-  // Look up newspapers
+  // Do a bunch of async work using the magic of Promises
   getPapers(search)
     .then(progress('Populating newspaper issues . . .'))
     .then(populateIssues)
@@ -55,9 +62,10 @@ $('#search form').submit(ev=>{
     .then(getRandomIssue)
     .then(progress('Retrieving issue information . . .'))   
     .then(getIssueFrontPage)
-    // Get ready to display it
     .then(issue=>{
+      // Get ready to display it
       progress('Loading front page image . . . ')
+
       // Make image object for pre-loading
       const image = $('<img/>')[0];
 
@@ -93,9 +101,14 @@ $('#search form').submit(ev=>{
       console.log('loading image: ' + issue.image)
       image.src = issue.image
     })
+  // Handle any errors we had in our promise chain
   .catch(error=>{
     $('#newspaper').addClass('hidden');
     console.error(error);
+
+    if(error.message === 'Failed to fetch')
+      error.message = 'Network error'
+
     showError(error.message);
   })
 })
