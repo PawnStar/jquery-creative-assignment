@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css?family=Cinzel|Bilbo Swash Caps|Montserrat');
+
+html,body{
+  margin: 0;
+  padding: 0;
+  background: #e2d5be;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.appbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: auto;
+  background-color: #a5702a;
+  color: rgba(255,255,255,.7);
+}
+
+.appbar h1 {
+  font-size: 24px;
+  padding: 5.5px 15px;
+  margin: 0;
+}
+
+.appbar span {
+  padding: 10px;
+}
+
+.hero{
+  background-image: url('aircraft-74020_1920.jpg');
+  background-size: 100% auto;
+  background-position: center;
+  background-color: rgba(255,255,255,.7);
+  filter: sepia(80%);
+  width: 100%;
+  height: 30vw;
+  font-size: 2vw;
+  overflow: hidden;
+}
+
+.hero h1{
+  padding-top: .4vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.6);
+  color: white;
+  font-family: 'Cinzel', serif;
+  margin: 0px;
+}
+
+.hero h1 span {
+  display: inline-block;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.hero h1 span[slot="preposition"] {
+  font-family: 'Bilbo Swash Caps', serif;
+  text-transform: lowercase;
+  margin-bottom: -.5vw;
+}
+
+.hero h1 span[slot="title"] {
+  font-size: 3em;
+}
+
+.sizing {
+  position: absolute;
+  left: -100000px;
+  top: -100000px;
+}
+
+#newspaper {
+  height: 0px;
+  position: relative;
+  top: -3.5vw;
+
+  transition-property: top, opacity;
+  transition-duration: 2s;
+}
+
+#newspaper.hidden {
+  opacity: 0;
+  overflow: hidden;
+  top: 0;
+  margin-bottom: 0;
+}
+
+#newspaper  > a {
+  max-width: 80vw;
+  display: block;
+  position: relative;
+  width: 700px;
+  margin: 0px auto;
+  background: white;
+  border: solid 15px white;
+  box-shadow: 0 10px 13px -6px rgba(0,0,0,.2),0 20px 31px 3px rgba(0,0,0,.14),0 8px 38px 7px rgba(0,0,0,.12);
+}
+
+#newspaper img {
+  width: 100%;
+}
+
+#newspaper:not(.hidden) {
+  margin-bottom: 40px;
+}
+
+#search {
+  text-align: center;
+}
+
+#newspaper:not(.hidden) + #search {
+  position: fixed;
+  bottom: 0;
+  background: #a5702a;
+  width: 100%;
+  color: white;
+}
+
+#newspaper:not(.hidden) + #search > * {
+  display: inline-block;
+  padding: 0px 10px;
+  margin: 9px;
+}
+
+#search em {
+  text-transform: uppercase;
+}
+
+.grunge{
+  mask-image: url('grunge-overlay.png');
+}
+
+@media (max-width: 600px){
+  .appbar{
+    height: auto;
+  }
+}

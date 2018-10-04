@@ -1,19 +1,107 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Today in History</title>
+    <title>This Day in History</title>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   </head>
   <body>
+    <div class="appbar">
+      <h1>Cole Erickson</h1>
+      <span>
+        CS 260: jQuery Creative Assignment
+      </span>
+    </div>
+
+    <div class="hero">
+      <h1>
+        <span slot="subtitle" class="grunge">This Day</span>
+        <span slot="preposition">in</span>
+        <span slot="title" class="grunge">History</span>
+      </h1>
+    </div>
+
+    <div id="newspaper" class="hidden"></div>
+
+    <div id="search">
+      <p>See what happened years ago in:</p>
+      <form>
+        <input name="city">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+   
     <script src="apiFunctions.js"></script>
     <script>
-      (async ()=>{
-        const city = await getUserLocation();
-        const newspapers = await getNewspapers(city);
+      // On page load then get city
+      $(document).ready(()=>{
+        $('#search input[name="city"]').val('Looking up city . . .')
+        $('#search input[name="city"]').attr('disabled', true);
 
-        document.querySelector('body').innerHTML = '<pre>' + JSON.stringify(newspapers, null, 2) + '</pre>';
+        getUserLocation()
+          .then(location=>{
+            $('#search input[name="city"]').attr('disabled', false);
+            $('#search input[name="city"]').val(location.join(' '))
+          })
+          .catch(console.log)
+      })
 
-        console.log(newspapers);
-      })().catch(console.error);
+      // When search form is submitted
+      $('#search form').submit(ev=>{
+        if(ev) ev.preventDefault();
+
+        // Get the words
+        const search = $('#search input[name="city"]').val().split(' ');
+
+        // Look up newspapers
+        getPapers(search)
+          // Get specific issues of newspapers
+          .then(populateIssues)
+          // Filter for ones with issues for today
+          .then(filterToday)
+          // Randomly pick one
+          .then(getRandomIssue)
+          // Get front page info
+          .then(getIssueFrontPage)
+          // Get ready to display it
+          .then(issue=>{
+            // Make image object for pre-loading
+            const image = $('<img/>')[0];
+
+            // When the image is ready . . .
+            $(image).on('load', ()=>{
+              // Construct newspaper div code
+              const img = `
+                <a target="_blank" href="${issue.htmlPage}">
+                  <img src="${issue.image}"/>
+                </a>
+              `
+
+              // Size up how big the image is
+              console.log('image loaded');
+              const size = $(image).addClass('sizing').width('700px').appendTo(document.body).height();
+              $(image).remove();
+
+              const name = issue.title.name;
+              let issueDate = new Date(issue.issue.date_issued.replace(/-/g, '\/'));
+              // Correct for time zones
+              issueDate.setMinutes(issueDate.getMinutes() + issueDate.getTimezoneOffset())
+              console.log(issueDate);
+              const date = issueDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+              $('#search > p').html(`Found "<em>${name}</em>" from ${date}.`);
+
+              // Show the newspaper div again
+              $('#newspaper').html(img).removeClass('hidden').animate({height: size}, 500, ()=>{
+                $('#newspaper').height('auto');
+              });
+            })
+
+            // Start loading
+            console.log('loading image: ' + issue.image)
+            image.src = issue.image
+          })
+        .catch(console.log)
+      })
     </script>
   </body>
 </html>
