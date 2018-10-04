@@ -112,7 +112,7 @@ html,body{
   text-align: center;
 }
 
-#newspaper:not(.hidden) + #search {
+#newspaper:not(.hidden) ~ #search {
   position: fixed;
   bottom: 0;
   background: #a5702a;
@@ -120,7 +120,7 @@ html,body{
   color: white;
 }
 
-#newspaper:not(.hidden) + #search > * {
+#newspaper:not(.hidden) ~ #search > * {
   display: inline-block;
   padding: 0px 10px;
   margin: 9px;
@@ -130,12 +130,110 @@ html,body{
   text-transform: uppercase;
 }
 
+#search input {
+  height: 20px;
+  padding: 5px;
+  border: solid 1px #c98206;
+  border-radius: 2px;
+  background: #ffebc1;
+}
+
+#search button {
+  height: 32px;
+  border: 0;
+  padding: 5px 10px;
+  border-radius: 2px;
+}
+
+#newspaper.hidden ~ #search button {
+  background: #a56b2a;
+  color: white;
+}
+
+#newspaper:not(.hidden) ~ #search button::after {
+  content: ' Again'
+}
+
+#newspaper.searching ~ #search {
+  display: none;
+}
+
+/**
+ * Search indicator
+ */
+
+#indicator {
+  display: none;
+  text-align: center;
+}
+
+#newspaper.searching ~ #indicator, #indicator.error {
+  display: block;
+}
+
+#newspaper.searching ~ #indicator span {
+  display: block;
+}
+
+#newspaper:not(.searching) ~ #indicator span {
+  display: none;
+}
+
+
+
+#indicator.error {
+  color: red;
+}
+
 .grunge{
   mask-image: url('grunge-overlay.png');
+  -webkit-mask-image: url('grunge-overlay.png');
 }
 
 @media (max-width: 600px){
   .appbar{
     height: auto;
+  }
+}
+
+.spinner,
+.spinner:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+.spinner {
+  margin: 0px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid #a5702a4d;
+  border-right: 1.1em solid #a5702a4d;
+  border-bottom: 1.1em solid #a5702a4d;
+  border-left: 1.1em solid #a5702a;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }

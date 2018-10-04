@@ -38,6 +38,9 @@ const getPapers = async location=>{
     return true;
   })
 
+  if(!papers.length)
+    throw new Error('No newspapers found in ' + location.join(' '));
+
   return papers;
 }
 
@@ -55,7 +58,12 @@ const filterToday = async papers=>{
     return paper
   })
 
-  return papers.filter(paper=>paper.issues.length > 0)
+  papers = papers.filter(paper=>paper.issues.length > 0)
+
+  if(!papers.length)
+    throw new Error('No publications found on that this day');
+
+  return papers;
 }
 
 // Randomly select an issue from the papers/issues passed in
