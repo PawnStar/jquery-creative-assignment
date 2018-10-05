@@ -61,7 +61,7 @@ const filterToday = async papers=>{
   papers = papers.filter(paper=>paper.issues.length > 0)
 
   if(!papers.length)
-    throw new Error('No publications found on that day');
+    throw new Error('No publications found on that day - perhaps try a larger city?');
 
   return papers;
 }
