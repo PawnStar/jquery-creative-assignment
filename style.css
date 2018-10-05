@@ -5,6 +5,7 @@ html,body{
   padding: 0;
   background: #e2d5be;
   font-family: 'Montserrat', sans-serif;
+  padding-bottom: 60px;
 }
 
 .appbar {
@@ -55,12 +56,13 @@ html,body{
   display: inline-block;
   text-align: center;
   text-transform: uppercase;
+  font-size: 1em;
 }
 
 .hero h1 span[slot="preposition"] {
   font-family: 'Bilbo Swash Caps', serif;
   text-transform: lowercase;
-  margin-bottom: -.5vw;
+  margin-bottom: -.25em;
 }
 
 .hero h1 span[slot="title"] {
@@ -78,7 +80,7 @@ html,body{
   position: relative;
   top: -3.5vw;
 
-  transition-property: top, opacity;
+  transition-property: top;
   transition-duration: 2s;
 }
 
@@ -118,16 +120,67 @@ html,body{
   background: #a5702a;
   width: 100%;
   color: white;
+  animation: slidein 2s;
+  min-height: 50px;
+}
+
+@keyframes slidein {
+  0% {
+    left: -100vw;
+    right: 100vw;
+  }
+
+  50% {
+    left: -100vw;
+    right: 100vw;
+  }
+
+  100% {
+    left: 0;
+    right: 0;
+  }
 }
 
 #newspaper:not(.hidden) ~ #search > * {
-  display: inline-block;
   padding: 0px 10px;
-  margin: 9px;
+  margin: 20px;
+}
+
+#search p {
+  font-size: 36px;
+}
+
+#newspaper:not(.hidden) ~ #search > p {
+  font-size: 24px;
 }
 
 #search em {
   text-transform: uppercase;
+  padding-right: 10px;
+}
+
+#indicator {
+  margin-top: 30px;
+}
+
+#search form *:disabled{
+  position: relative;
+  overflow: hidden;
+}
+
+#search form *:disabled::before{
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+#search form input:disabled{
+  background: #ede4d1;
+  color: gray;
 }
 
 #search input {
@@ -148,6 +201,11 @@ html,body{
 #newspaper.hidden ~ #search button {
   background: #a56b2a;
   color: white;
+}
+
+#newspaper.hidden ~ #search span {
+  display: none;
+  margin: none;
 }
 
 #newspaper:not(.hidden) ~ #search button::after {

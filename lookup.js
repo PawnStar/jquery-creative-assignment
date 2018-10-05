@@ -17,6 +17,7 @@ $(document).ready(()=>{
   // Disable input temporarily
   $('#search input[name="city"]').val('Looking up city . . .')
   $('#search input[name="city"]').attr('disabled', true);
+  $('#search button').attr('disabled', true);
 
   // Make async request
   getUserLocation()
@@ -32,6 +33,7 @@ $(document).ready(()=>{
     // In either case enable it again
     .finally(()=>{
       $('#search input[name="city"]').attr('disabled', false);
+      $('#search button').attr('disabled', false);
     })
 })
 
@@ -39,9 +41,13 @@ $(document).ready(()=>{
 $('#search form').submit(ev=>{
   if(ev) ev.preventDefault();
 
+  // Don't search until city is looked up
+  if($('#search input[name="city"]').attr('disabled'))
+    return;
+
   // Get the text input
   const search = $('#search input[name="city"]').val().split(' ');
-  progress('Looking up newspapers . . .');
+  progress('Looking for newspapers in &ldquo;' + search.join(' ')  + '&rdquo; . . .');
 
   // Hide newspaper
   $('#newspaper')
@@ -54,17 +60,13 @@ $('#search form').submit(ev=>{
 
   // Do a bunch of async work using the magic of Promises
   getPapers(search)
-    .then(progress('Populating newspaper issues . . .'))
-    .then(populateIssues)
-    .then(progress('Filtering for issues published today . . .'))          
-    .then(filterToday)
-    .then(progress('Picking issue . . .'))   
+    .then(populateIssues)         
+    .then(filterToday) 
     .then(getRandomIssue)
-    .then(progress('Retrieving issue information . . .'))   
     .then(getIssueFrontPage)
     .then(issue=>{
       // Get ready to display it
-      progress('Loading front page image . . . ')
+      progress('Loading newspaper front page . . . ')
 
       // Make image object for pre-loading
       const image = $('<img/>')[0];
@@ -89,7 +91,7 @@ $('#search form').submit(ev=>{
         issueDate.setMinutes(issueDate.getMinutes() + issueDate.getTimezoneOffset())
         console.log(issueDate);
         const date = issueDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
-        $('#search > p').html(`Found "<em>${name}</em>" from ${date}.`);
+        $('#search > p').html(`Found <em>&ldquo;${name}&rdquo;</em> from ${date}.`)
 
         // Show the newspaper div again
         $('#newspaper').html(img).removeClass('hidden').removeClass('searching').animate({height: size}, 500, ()=>{
