@@ -39,7 +39,7 @@ const getPapers = async location=>{
   })
 
   if(!papers.length)
-    throw new Error('No newspapers found in ' + location.join(' '));
+    throw new Error('No newspapers found in ' + location.join(' ') + ' - perhaps try a larger city?');
 
   return papers;
 }
